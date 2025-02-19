@@ -1,0 +1,105 @@
+/*
+SDL_Texture* drawBuffer(Symat& symat, Buffer& buffer, float factor, int spanx, int spany,
+		int* movex, int* prevhmax, bool firsttime, SDL_Color colorfg, SDL_Color colorbg) {
+    if (buffer.tokens.empty()) {
+        return nullptr;
+    }
+    buffer.size.x = 0;
+    buffer.size.y = 0;
+    buffer.pos.x = 0;
+    buffer.pos.y = 0;
+
+
+    float dimfactor = (4 * factor) / 5;
+    int chary = 0;
+
+    if (!buffer.tokens.empty()) {
+        SDL_Surface* chartest = nullptr;
+
+        const auto& lastToken = buffer.tokens.back();
+        if ((lastToken.flags & ISBIGOP) == ISBIGOP) {
+            chartest = TTF_RenderUTF8_Shaded(bigopfont, lastToken.token.c_str(), colorfg,colorbg);
+        } else {
+            chartest = TTF_RenderUTF8_Shaded(mainfont, lastToken.token.c_str(), colorfg,colorbg);
+        }
+
+        if (chartest != nullptr) {
+            chary = static_cast<int>(factor * chartest->h);
+            SDL_FreeSurface(chartest);
+        }
+    }
+
+	SDL_Texture * texTarget = SDL_CreateTexture(symat.renderer,SDL_PIXELFORMAT_RGBA8888,SDL_TEXTUREACCESS_TARGET,*symat.screenx, *symat.screeny);
+    if (!texTarget) {
+        fprintf(stderr, "Error creating texture: %s\n", SDL_GetError());
+        return nullptr;
+    }
+	SDL_SetRenderTarget(symat.renderer,texTarget);
+
+	SDL_SetTextureBlendMode(texTarget, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureAlphaMod(texTarget, 0xFF); 
+	SDL_SetRenderDrawBlendMode(symat.renderer, SDL_BLENDMODE_BLEND);
+	SDL_RenderClear(symat.renderer);
+	SDL_SetRenderDrawColor(symat.renderer,255,255,255,255);
+
+    SDL_Texture * torender = drawLine(symat, buffer, buffer.tokens, factor,
+			spanx, spany, buffer.size.y, movex, prevhmax, colorfg,colorbg);
+		SDL_RenderCopy(symat.renderer,torender,NULL,NULL);
+
+    int supx = 0;
+    int subx = 0;
+    int fracsupx = 0;
+    int fracsubx = 0;
+
+	
+    if (buffer.suptext) {
+        torender = drawBuffer(symat, *buffer.suptext, dimfactor,
+				spanx + buffer.size.x - factor * 3, spany - chary / 3, &supx, nullptr, false, colorfg,colorbg);
+		if(torender){
+			SDL_RenderCopy(symat.renderer,torender,NULL,NULL);
+		}
+    }
+
+    if (buffer.subtext) {
+        torender = drawBuffer(symat, *buffer.subtext, dimfactor,
+				spanx + buffer.size.x - factor * 3, spany + (2 * chary) / 3, &subx, nullptr, false, colorfg,colorbg);
+		if(torender){
+			SDL_RenderCopy(symat.renderer,torender,NULL,NULL);
+		}
+    }
+	
+	SDL_SetRenderTarget(symat.renderer,NULL);
+	 
+    *movex += std::max(supx, subx);
+
+    if (buffer.fracsuptext) {
+        SDL_Texture * fracsuprender = drawBuffer(symat, *buffer.fracsuptext, factor,
+				spanx + *movex, spany - (FONTSIZE/2 + 5), &fracsupx, nullptr, false, colorfg,colorbg);
+		SDL_RenderCopy(symat.renderer,fracsuprender,NULL,NULL);
+		SDL_DestroyTexture(fracsuprender);
+	}
+    if (buffer.fracsubtext) {
+        SDL_Texture * fracsubrender = drawBuffer(symat, *buffer.fracsubtext, factor,
+				spanx + *movex, spany + (FONTSIZE/2 + 5), &fracsubx, nullptr, false, colorfg,colorbg);
+		SDL_RenderCopy(symat.renderer,fracsubrender,NULL,NULL);
+		SDL_DestroyTexture(fracsubrender);
+	}
+
+	if(buffer.fracsuptext){
+		*movex += fracsupx;
+	}
+	if(buffer.fracsubtext){
+		*movex == - fracsupx + std::max(fracsupx,fracsubx);
+	}
+
+    if (buffer.next) {
+        SDL_Texture * torendernext = drawBuffer(symat, *buffer.next, factor,
+				spanx + *movex, spany, movex, prevhmax, false, colorfg,colorbg);
+		SDL_RenderCopy(symat.renderer,torendernext,NULL,NULL);
+		SDL_DestroyTexture(torendernext);
+    }
+	
+	return texTarget;
+
+}
+*/

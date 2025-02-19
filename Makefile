@@ -1,10 +1,9 @@
-# Compilador y flags
-CC = gcc
-CFLAGS = -Wall -Iinc -Isrc/buffers -lm -lSDL2 -lSDL2_ttf -lSDL2_image -lunistring -g
-#CFLAGS = -Wall -Iinc -lunistring -g `MagickWand-config --cflags --cppflags` `MagickWand-config --ldflags --libs`
-# CFLAGS = -Wall -Iinc -Isrc/buffers (cada vez que quiera meter una carpeta mas dentro del src, linkear asi) -lSDL2 -lSDL2_ttf -lSDL2_image -lunistring -g
-# TODO: Implementar que pueda generar imagenes tambien.
-
+# Variables del compilador
+CXX = g++
+CXXFLAGS = -Wall -std=c++17 -Iinc -Isrc/buffers -lm -lSDL2 -lSDL2_ttf -lSDL2_image -lunistring -g
+#CXXFLAGS = -Wall -std=c++17 -Iinc -lunistring -g `MagickWand-config --cflags --cppflags` `MagickWand-config --ldflags --libs`
+# CXXFLAGS = -Wall -std=c++17 -Iinc -Isrc/buffers (cada vez que quiera meter una carpeta más dentro del src, linkear así) -lSDL2 -lSDL2_ttf -lSDL2_image -lunistring -g
+# TODO: Implementar que pueda generar imágenes también.
 
 # Directorios
 SRC_DIR = src
@@ -14,10 +13,10 @@ BIN_DIR = bin
 # Nombre del ejecutable
 TARGET = $(BIN_DIR)/mathparser
 
-# Encontrar todos los archivos .c dentro de src y sus subdirectorios
-SRC_FILES = $(shell find $(SRC_DIR) -name "*.c")
+# Encontrar todos los archivos .cpp dentro de src y sus subdirectorios
+SRC_FILES = $(shell find $(SRC_DIR) -name "*.cpp")
 # Los archivos .o se generarán en la carpeta obj
-OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 # Reglas
 all: $(BIN_DIR) $(OBJ_DIR) $(TARGET)
@@ -30,14 +29,15 @@ $(OBJ_DIR):
 
 # Compilar el ejecutable final
 $(TARGET): $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $@ $(OBJ_FILES) -ly -lfl
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ_FILES) -ly -lfl
 
-# Regla genérica para compilar archivos .c
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+# Regla genérica para compilar archivos .cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Limpiar archivos generados
 clean:
-	rm -rf $(OBJ_DIR)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 .PHONY: all clean
+
