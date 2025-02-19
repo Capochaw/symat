@@ -8,8 +8,6 @@ You must have ```SDL2``` installed on your PC.
 2) ```cd Symat```
 3) ```make```
 To execute, run ```bin/mathparser confs/calc.sm``` for a basic config for calculus use.
-# TODO
-[ ] Add fractions
 # Create config
 The sintaxis is the following:
 ```)FLAGS("a" "b"```
